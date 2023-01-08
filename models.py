@@ -193,8 +193,8 @@ def setup_db(app, database_path=database_path):
     db.app = app
     db.init_app(app)
     with app.app_context():
-        db.create_all()
         db.drop_all()
+        db.create_all()
         db_insert_data()
 
 
