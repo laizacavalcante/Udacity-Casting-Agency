@@ -17,12 +17,13 @@ from flask_migrate import Migrate
 from datetime import datetime
 
 
-database_name = "castAgency"
-username = os.environ.get("DB_USERNAME")
-password = os.environ.get("PASSWORD")
-database_path = f"postgresql://{username}:{password}@localhost:5432/{database_name}"
-print(f"DB_USERNAME {username}, {password}, {database_path}")
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
 
+database_path = "postgresql://{}:{}@localhost:{}/{}".format(DB_USERNAME, DB_PASSWORD, DB_PORT, DB_NAME)
+print(f"models -> database_path: {database_path}")
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -188,6 +189,7 @@ class Casting(db.Model, DbTransactions):
 
 
 def setup_db(app, database_path=database_path):
+    print("setup_db config")
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
