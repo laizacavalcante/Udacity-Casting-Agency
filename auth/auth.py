@@ -8,15 +8,11 @@ from jose import jwt
 from urllib.request import urlopen
 
 
-# Take environment variables from ".env"
-# (file should be in the root directory of your project)
 load_dotenv()
 
 AUTH0_DOMAIN = os.environ.get("AUTH0_DOMAIN")
 API_AUDIENCE = os.environ.get("API_AUDIENCE")
 ALGORITHMS = [os.environ.get("ALGORITHMS")]
-
-print(AUTH0_DOMAIN, API_AUDIENCE, ALGORITHMS)
 
 
 class AuthError(Exception):
@@ -26,8 +22,6 @@ class AuthError(Exception):
 
 
 def get_token_auth_header():
-    print("get_token_auth_header")
-
     auth = request.headers.get("Authorization", None)
     if not auth:
         raise AuthError(
@@ -58,15 +52,14 @@ def get_token_auth_header():
 
 
 def check_permissions(permission, payload):
-    print("check_permissions")
-    print(permission, payload)
+    print("check_permissions", permission, payload)
     if permission not in payload["permissions"]:
         raise AuthError(
             {
                 "description": "User don't have sufficient permission",
-                "status_code": 403,
+                "status_code": 401,
             },
-            403,
+            401,
         )
 
     if "permissions" not in payload.keys():
@@ -82,17 +75,10 @@ def check_permissions(permission, payload):
 
 
 def verify_decode_jwt(token):
-    """
-    Use https://stackoverflow.com/questions/62640016/decoding-jwt-autherror
-    -code-invalid-header-description-unable-to-pa
-    """
-    print("verify_decode_jwt")
-
     jsonurl = urlopen(f"https://{AUTH0_DOMAIN}/.well-known/jwks.json")
     jwks = json.loads(jsonurl.read())
 
     unverified_header = jwt.get_unverified_header(token)
-    print(unverified_header)
     if "kid" not in unverified_header:
         raise AuthError(
             {"code": "invalid_header", "description": "Authorization malformed."}, 401

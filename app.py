@@ -1,4 +1,3 @@
-# TODO: Encontrar problema nas rotas de PATCH da api
 # TODO: Resolver problema de versionamento do flask migrate
 # TODO: Verificar/ refazer testes
 
@@ -230,7 +229,6 @@ def create_app(test_config=None):
             abort(422)
         if actor is None:
             abort(404)
-
         try:
             actor.delete()
             return jsonify({"success": True, "deleted_actor": actor.format_json()}), 200
@@ -309,8 +307,7 @@ def create_app(test_config=None):
                 return jsonify(
                     {
                         "success": True,
-                        "added_movie_id": movie.id,
-                        "added_movie_title": movie.title,
+                        "movie_id": movie.id,
                         "movies_total": len(Movie.query.all()),
                     }
                 )
@@ -318,7 +315,6 @@ def create_app(test_config=None):
                 insert_error = True
                 db.session.rollback()
                 print(f"Constraint violation {error}")
-                abort(422)
             except Exception as err:
                 insert_error = True
                 db.session.rollback()
