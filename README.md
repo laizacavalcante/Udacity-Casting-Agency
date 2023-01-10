@@ -2,7 +2,7 @@
 # Udacity-FSND-Casting-Agency
 
 This project is part of the Udacity's Fullstack Nanodegree program. It is an API to retireve data from a casting agency database, that could be used for a company responsible for creating movies and managing/assigning those to movies. Here we have three roles `Executive Producer`, `Casting Director`, and `Casting Assistant` with different permissions levels.
----
+
 
 
 ## Getting Started
